@@ -2,169 +2,127 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Timber Cutting Planner</title>
 
 <style>
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #f3f5f4;
-  color: #202522;
+body{
+  font-family:Arial,sans-serif;
+  margin:0;
+  background:#f3f5f4;
+  color:#222;
 }
-
-header {
-  background: #245c43;
-  color: white;
-  padding: 22px 16px;
-  text-align: center;
+header{
+  background:#245c43;
+  color:white;
+  padding:20px;
+  text-align:center;
 }
-
-header h1 {
-  margin: 0;
-  font-size: 25px;
+header h1{margin:0;font-size:24px}
+header p{margin:6px 0 0}
+main{
+  max-width:700px;
+  margin:auto;
+  padding:15px;
 }
-
-header p {
-  margin: 6px 0 0;
-  opacity: .9;
-  font-size: 14px;
+.card{
+  background:white;
+  padding:16px;
+  border-radius:12px;
+  margin-bottom:15px;
+  box-shadow:0 2px 8px #0001;
 }
-
-.container {
-  max-width: 700px;
-  margin: auto;
-  padding: 16px;
+h2{margin-top:0}
+label{
+  font-weight:bold;
+  display:block;
+  margin-bottom:4px;
 }
-
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+input{
+  box-sizing:border-box;
+  width:100%;
+  padding:12px;
+  font-size:16px;
+  border:1px solid #aaa;
+  border-radius:7px;
 }
-
-h2 {
-  margin-top: 0;
-  font-size: 19px;
+.settings{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
-
-label {
-  font-weight: bold;
-  font-size: 14px;
+.cutrow{
+  display:grid;
+  grid-template-columns:1fr 1fr 45px;
+  gap:8px;
+  margin-bottom:10px;
+  align-items:end;
 }
-
-input {
-  width: 100%;
-  padding: 11px;
-  margin-top: 5px;
-  border: 1px solid #bbb;
-  border-radius: 7px;
-  font-size: 16px;
+button{
+  border:0;
+  border-radius:8px;
+  font-size:16px;
+  font-weight:bold;
+  padding:12px;
 }
-
-.settings {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
+.add{
+  width:100%;
+  background:#e3ece7;
+  color:#245c43;
 }
-
-.cut-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr 44px;
-  gap: 8px;
-  margin-bottom: 10px;
-  align-items: end;
+.remove{
+  background:#eee;
+  color:#a00;
 }
-
-button {
-  border: 0;
-  border-radius: 8px;
-  padding: 12px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
+.calc{
+  width:100%;
+  background:#245c43;
+  color:white;
+  padding:15px;
+  margin-top:12px;
+  font-size:18px;
 }
-
-.add {
-  width: 100%;
-  background: #e4ebe7;
-  color: #245c43;
+.summary{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
-
-.delete {
-  background: #eee;
-  color: #a12626;
-  height: 44px;
+.box{
+  background:#edf4f0;
+  padding:12px;
+  border-radius:8px;
 }
-
-.calculate {
-  width: 100%;
-  background: #245c43;
-  color: white;
-  padding: 15px;
-  margin-top: 8px;
-  font-size: 18px;
+.box strong{
+  display:block;
+  color:#245c43;
+  font-size:22px;
+  margin-top:4px;
 }
-
-.summary {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+.stock{
+  background:#f7faf8;
+  border-left:5px solid #245c43;
+  padding:13px;
+  margin:12px 0;
+  border-radius:6px;
 }
-
-.stat {
-  background: #eef4f0;
-  padding: 12px;
-  border-radius: 8px;
+.stock h3{
+  margin:0 0 8px;
 }
-
-.stat strong {
-  display: block;
-  font-size: 22px;
-  color: #245c43;
-  margin-top: 3px;
+.cuts{
+  font-size:18px;
+  font-weight:bold;
+  margin:8px 0;
 }
-
-.stock {
-  border-left: 5px solid #245c43;
-  background: #f8faf9;
-  padding: 14px;
-  margin-top: 12px;
-  border-radius: 6px;
+.error{
+  background:#ffe5e5;
+  color:#900;
+  padding:12px;
+  border-radius:8px;
+  margin-top:10px;
 }
-
-.stock-title {
-  font-weight: bold;
-  font-size: 17px;
-}
-
-.cuts {
-  font-size: 18px;
-  margin: 9px 0;
-  font-weight: bold;
-}
-
-.offcut {
-  font-size: 14px;
-  color: #555;
-}
-
-.error {
-  background: #ffe8e8;
-  color: #8b1515;
-  padding: 12px;
-  border-radius: 8px;
-  margin-top: 12px;
-}
-
-.hidden { display: none; }
-
-@media(max-width:500px) {
-  .settings { grid-template-columns: 1fr; }
+#results{display:none}
+@media(max-width:500px){
+  .settings{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -172,99 +130,461 @@ button {
 <body>
 
 <header>
-  <h1>🪵 Timber Cutting Planner</h1>
-  <p>Minimise waste and reuse available space</p>
+<h1>🪵 Timber Cutting Planner</h1>
+<p>Optimise your cuts and reduce waste</p>
 </header>
 
-<div class="container">
+<main>
 
-  <div class="card">
-    <h2>Timber</h2>
+<div class="card">
+<h2>Timber</h2>
 
-    <div class="settings">
-      <div>
-        <label>Purchased length (mm)</label>
-        <input id="stockLength" type="number" value="2400">
-      </div>
+<div class="settings">
 
-      <div>
-        <label>Saw kerf (mm)</label>
-        <input id="kerf" type="number" value="3">
-      </div>
-    </div>
-  </div>
+<div>
+<label for="stock">Purchased length (mm)</label>
+<input id="stock" type="number" value="2400">
+</div>
 
-  <div class="card">
-    <h2>Required Cuts</h2>
+<div>
+<label for="kerf">Saw kerf (mm)</label>
+<input id="kerf" type="number" value="3">
+</div>
 
-    <div id="cuts"></div>
+</div>
+</div>
 
-    <button class="add" onclick="addRow()">+ Add another cut</button>
 
-    <button class="calculate" onclick="calculate()">
-      Calculate Cutting Plan
-    </button>
+<div class="card">
 
-    <div id="error"></div>
-  </div>
+<h2>Required Cuts</h2>
 
-  <div id="results" class="hidden">
+<div id="cutRows"></div>
 
-    <div class="card">
-      <h2>Summary</h2>
+<button type="button" class="add" id="addButton">
++ Add another cut
+</button>
 
-      <div class="summary">
-        <div class="stat">
-          Full lengths to buy
-          <strong id="lengthCount">0</strong>
-        </div>
+<button type="button" class="calc" id="calculateButton">
+Calculate Cutting Plan
+</button>
 
-        <div class="stat">
-          Total offcut
-          <strong id="totalWaste">0 mm</strong>
-        </div>
-
-        <div class="stat">
-          Total cuts
-          <strong id="totalCuts">0</strong>
-        </div>
-
-        <div class="stat">
-          Utilisation
-          <strong id="utilisation">0%</strong>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>Cutting Plan</h2>
-      <div id="plan"></div>
-    </div>
-
-  </div>
+<div id="error"></div>
 
 </div>
 
+
+<div id="results">
+
+<div class="card">
+
+<h2>Summary</h2>
+
+<div class="summary">
+
+<div class="box">
+Full lengths to buy
+<strong id="stockCount">0</strong>
+</div>
+
+<div class="box">
+Total offcut
+<strong id="waste">0 mm</strong>
+</div>
+
+<div class="box">
+Total cuts
+<strong id="cutCount">0</strong>
+</div>
+
+<div class="box">
+Utilisation
+<strong id="utilisation">0%</strong>
+</div>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h2>Cutting Plan</h2>
+
+<div id="plan"></div>
+
+</div>
+
+</div>
+
+</main>
+
+
 <script>
 
-const cutsDiv = document.getElementById("cuts");
+var rows = document.getElementById("cutRows");
+var addButton = document.getElementById("addButton");
+var calculateButton = document.getElementById("calculateButton");
 
-function addRow(length="", qty="") {
-  const row = document.createElement("div");
-  row.className = "cut-row";
 
-  row.innerHTML = `
-    <div>
-      <label>Length (mm)</label>
-      <input class="cutLength" type="number" value="${length}">
-    </div>
+function addCutRow(length, quantity){
 
-    <div>
-      <label>Quantity</label>
-      <input class="cutQty" type="number" value="${qty}">
-    </div>
+  var row = document.createElement("div");
+  row.className = "cutrow";
 
-    <button class="delete" onclick="this.parentElement.remove()">✕</button>
-  `;
+  var lengthBox = document.createElement("div");
 
-  cutsDiv
+  var lengthLabel = document.createElement("label");
+  lengthLabel.textContent = "Length (mm)";
+
+  var lengthInput = document.createElement("input");
+  lengthInput.type = "number";
+  lengthInput.className = "cutLength";
+  lengthInput.value = length || "";
+
+  lengthBox.appendChild(lengthLabel);
+  lengthBox.appendChild(lengthInput);
+
+
+  var qtyBox = document.createElement("div");
+
+  var qtyLabel = document.createElement("label");
+  qtyLabel.textContent = "Quantity";
+
+  var qtyInput = document.createElement("input");
+  qtyInput.type = "number";
+  qtyInput.className = "cutQty";
+  qtyInput.value = quantity || "";
+
+  qtyBox.appendChild(qtyLabel);
+  qtyBox.appendChild(qtyInput);
+
+
+  var removeButton = document.createElement("button");
+  removeButton.type = "button";
+  removeButton.className = "remove";
+  removeButton.textContent = "✕";
+
+  removeButton.addEventListener("click", function(){
+    row.remove();
+  });
+
+
+  row.appendChild(lengthBox);
+  row.appendChild(qtyBox);
+  row.appendChild(removeButton);
+
+  rows.appendChild(row);
+}
+
+
+addButton.addEventListener("click", function(){
+  addCutRow("", "");
+});
+
+
+calculateButton.addEventListener("click", calculatePlan);
+
+
+// Starting example
+addCutRow(2000,3);
+addCutRow(900,8);
+addCutRow(624,8);
+addCutRow(548,8);
+addCutRow(430,2);
+
+
+function calculatePlan(){
+
+  var error = document.getElementById("error");
+  var results = document.getElementById("results");
+
+  error.innerHTML = "";
+  results.style.display = "none";
+
+
+  var stockLength =
+    parseFloat(document.getElementById("stock").value);
+
+  var kerf =
+    parseFloat(document.getElementById("kerf").value);
+
+
+  if(
+    isNaN(stockLength) ||
+    stockLength <= 0 ||
+    isNaN(kerf) ||
+    kerf < 0
+  ){
+    showError("Enter a valid timber length and saw kerf.");
+    return;
+  }
+
+
+  var lengthInputs =
+    document.getElementsByClassName("cutLength");
+
+  var qtyInputs =
+    document.getElementsByClassName("cutQty");
+
+
+  var requiredCuts = [];
+
+
+  for(var i=0; i<lengthInputs.length; i++){
+
+    var length = parseFloat(lengthInputs[i].value);
+    var qty = parseInt(qtyInputs[i].value,10);
+
+
+    if(
+      (isNaN(length) || length <= 0) &&
+      (isNaN(qty) || qty <= 0)
+    ){
+      continue;
+    }
+
+
+    if(
+      isNaN(length) ||
+      length <= 0 ||
+      isNaN(qty) ||
+      qty <= 0
+    ){
+      showError("Check all cut lengths and quantities.");
+      return;
+    }
+
+
+    if(length + kerf > stockLength){
+      showError(
+        length +
+        " mm will not fit into a " +
+        stockLength +
+        " mm stock length."
+      );
+      return;
+    }
+
+
+    for(var q=0; q<qty; q++){
+      requiredCuts.push(length);
+    }
+
+  }
+
+
+  if(requiredCuts.length === 0){
+    showError("Enter at least one required cut.");
+    return;
+  }
+
+
+  // Largest cuts first
+  requiredCuts.sort(function(a,b){
+    return b-a;
+  });
+
+
+  var stockPieces = [];
+
+
+  // BEST FIT DECREASING
+  for(var c=0; c<requiredCuts.length; c++){
+
+    var cut = requiredCuts[c];
+
+    var bestPiece = -1;
+    var bestRemaining = Infinity;
+
+
+    for(var s=0; s<stockPieces.length; s++){
+
+      var piece = stockPieces[s];
+
+      var newUsed =
+        piece.used + cut + kerf;
+
+      var remaining =
+        stockLength - newUsed;
+
+
+      if(
+        remaining >= 0 &&
+        remaining < bestRemaining
+      ){
+        bestRemaining = remaining;
+        bestPiece = s;
+      }
+
+    }
+
+
+    if(bestPiece === -1){
+
+      stockPieces.push({
+        cuts:[cut],
+        used:cut + kerf
+      });
+
+    }else{
+
+      stockPieces[bestPiece].cuts.push(cut);
+
+      stockPieces[bestPiece].used +=
+        cut + kerf;
+
+    }
+
+  }
+
+
+  // Safety check
+  for(var x=0; x<stockPieces.length; x++){
+
+    if(stockPieces[x].used > stockLength){
+
+      showError(
+        "Calculation error. A timber length was overloaded."
+      );
+
+      return;
+    }
+
+  }
+
+
+  displayResults(
+    stockPieces,
+    requiredCuts,
+    stockLength,
+    kerf
+  );
+
+}
+
+
+function displayResults(
+  stockPieces,
+  requiredCuts,
+  stockLength,
+  kerf
+){
+
+  var plan =
+    document.getElementById("plan");
+
+  plan.innerHTML = "";
+
+
+  var totalWaste = 0;
+  var totalUsed = 0;
+
+
+  for(var i=0; i<stockPieces.length; i++){
+
+    var piece = stockPieces[i];
+
+    var remaining =
+      stockLength - piece.used;
+
+    totalWaste += remaining;
+    totalUsed += piece.used;
+
+
+    var card =
+      document.createElement("div");
+
+    card.className = "stock";
+
+
+    var title =
+      document.createElement("h3");
+
+    title.textContent =
+      "Length " +
+      (i+1) +
+      " — " +
+      stockLength +
+      " mm";
+
+
+    var cuts =
+      document.createElement("div");
+
+    cuts.className = "cuts";
+
+    cuts.textContent =
+      piece.cuts.join(" + ") +
+      " mm";
+
+
+    var details =
+      document.createElement("div");
+
+    details.innerHTML =
+      "Cuts: " +
+      piece.cuts.length +
+      "<br>" +
+      "Kerf allowance: " +
+      (piece.cuts.length * kerf) +
+      " mm<br>" +
+      "Used: " +
+      piece.used +
+      " mm<br>" +
+      "<strong>Offcut: " +
+      remaining +
+      " mm</strong>";
+
+
+    card.appendChild(title);
+    card.appendChild(cuts);
+    card.appendChild(details);
+
+    plan.appendChild(card);
+
+  }
+
+
+  var purchased =
+    stockPieces.length * stockLength;
+
+
+  var percentage =
+    purchased > 0
+    ? ((totalUsed / purchased) * 100).toFixed(1)
+    : 0;
+
+
+  document.getElementById("stockCount").textContent =
+    stockPieces.length;
+
+  document.getElementById("waste").textContent =
+    totalWaste + " mm";
+
+  document.getElementById("cutCount").textContent =
+    requiredCuts.length;
+
+  document.getElementById("utilisation").textContent =
+    percentage + "%";
+
+
+  document.getElementById("results").style.display =
+    "block";
+
+}
+
+
+function showError(message){
+
+  document.getElementById("error").innerHTML =
+    '<div class="error">' +
+    message +
+    '</div>';
+
+}
+
+</script>
+
+</body>
+</html>

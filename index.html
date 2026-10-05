@@ -7,75 +7,37 @@
 
 <style>
 *{box-sizing:border-box}
-body{
- margin:0;font-family:Arial,sans-serif;
- background:#f3f5f4;color:#222
-}
-header{
- background:#245c43;color:white;
- padding:20px;text-align:center
-}
+body{margin:0;font-family:Arial,sans-serif;background:#f3f5f4;color:#222}
+header{background:#245c43;color:#fff;padding:20px;text-align:center}
 header h1{margin:0;font-size:24px}
 header p{margin:6px 0 0;font-size:14px}
 main{max-width:760px;margin:auto;padding:14px}
-.card{
- background:white;padding:16px;border-radius:12px;
- margin-bottom:14px;box-shadow:0 2px 8px #0001
-}
+.card{background:#fff;padding:16px;border-radius:12px;margin-bottom:14px;box-shadow:0 2px 8px #0001}
 h2{margin:0 0 14px}
+h3{margin:0 0 8px}
 label{display:block;font-weight:bold;font-size:13px;margin-bottom:4px}
-input,select{
- width:100%;padding:11px;font-size:16px;
- border:1px solid #aaa;border-radius:7px;background:white
-}
-.grid{
- display:grid;grid-template-columns:1fr 1fr;
- gap:10px
-}
-.cutrow{
- display:grid;grid-template-columns:1fr 1fr 44px;
- gap:8px;margin-bottom:10px;align-items:end
-}
-button{
- border:0;border-radius:8px;padding:12px;
- font-size:16px;font-weight:bold;cursor:pointer
-}
-.primary{background:#245c43;color:white;width:100%;margin-top:10px}
+input,select{width:100%;padding:11px;font-size:16px;border:1px solid #aaa;border-radius:7px;background:#fff}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:1fr 1fr 44px;gap:8px;margin-bottom:10px;align-items:end}
+button{border:0;border-radius:8px;padding:12px;font-size:16px;font-weight:bold;cursor:pointer}
+.primary{background:#245c43;color:#fff;width:100%;margin-top:10px}
 .secondary{background:#e3ece7;color:#245c43;width:100%}
 .remove{background:#eee;color:#a00}
-.buttonGrid{
- display:grid;grid-template-columns:1fr 1fr;
- gap:8px;margin-top:8px
-}
-.summary{
- display:grid;grid-template-columns:1fr 1fr;
- gap:9px
-}
-.stat{
- background:#edf4f0;padding:11px;border-radius:8px
-}
-.stat strong{
- display:block;font-size:21px;color:#245c43;margin-top:3px
-}
-.stock{
- background:#f8faf9;border-left:5px solid #245c43;
- padding:13px;margin:11px 0;border-radius:6px
-}
-.stock h3{margin:0 0 7px}
+.buttonGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.summary{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.stat{background:#edf4f0;padding:11px;border-radius:8px}
+.stat strong{display:block;font-size:21px;color:#245c43;margin-top:3px}
+.stock{background:#f8faf9;border-left:5px solid #245c43;padding:13px;margin:11px 0;border-radius:6px}
+.offcutStock{border-left-color:#b97913;background:#fffaf0}
 .cuts{font-weight:bold;font-size:18px;margin:8px 0}
-.good{
- background:#e7f6eb;color:#17652c;
- padding:10px;border-radius:7px;margin-bottom:12px
-}
-.warning{
- background:#fff4d8;color:#6c5000;
- padding:10px;border-radius:7px;margin-bottom:12px
-}
-.error{
- background:#ffe5e5;color:#900;
- padding:10px;border-radius:7px;margin-top:10px
-}
+.good{background:#e7f6eb;color:#17652c;padding:11px;border-radius:7px;margin-bottom:10px}
+.warning{background:#fff4d8;color:#6c5000;padding:11px;border-radius:7px;margin-bottom:10px}
+.error{background:#ffe5e5;color:#900;padding:11px;border-radius:7px;margin-top:10px}
+.badge{display:inline-block;padding:5px 8px;border-radius:20px;font-size:12px;font-weight:bold;margin-bottom:7px}
+.newBadge{background:#dcefe5;color:#245c43}
+.offBadge{background:#fff0cc;color:#765000}
 .small{font-size:12px;color:#666}
+.sectionLine{border-top:1px solid #ddd;margin:16px 0}
 #results{display:none}
 
 @media(max-width:500px){
@@ -84,7 +46,7 @@ button{
 
 @media print{
  header,.inputArea,.buttons{display:none!important}
- body{background:white}
+ body{background:#fff}
  main{max-width:none;padding:0}
  .card{box-shadow:none}
  .stock{break-inside:avoid}
@@ -96,7 +58,7 @@ button{
 
 <header>
 <h1>🪵 Timber Cutting Planner</h1>
-<p>Optimise stock, cuts, kerf, waste and cost</p>
+<p>Optimise new timber and reusable offcuts</p>
 </header>
 
 <main>
@@ -104,17 +66,16 @@ button{
 <div class="inputArea">
 
 <div class="card">
-<h2>Timber</h2>
+<h2>New Timber</h2>
 
 <div class="grid">
-
 <div>
-<label>Stock length (mm)</label>
+<label>Length to purchase (mm)</label>
 <input id="stockLength" type="number" value="2400">
 </div>
 
 <div>
-<label>Price per full length (£)</label>
+<label>Price per length (£)</label>
 <input id="price" type="number" value="0" step="0.01">
 </div>
 
@@ -130,45 +91,58 @@ button{
 <option value="between">Kerf only between pieces</option>
 </select>
 </div>
-
 </div>
 
 <p class="small">
-If unsure, leave “Kerf for every cut” selected. This is the safer
-allowance when preparing a buying/cutting list.
+“Every cut” is the conservative option. “Between pieces” assumes no
+additional kerf is required after the final usable piece.
 </p>
-
 </div>
 
 
 <div class="card">
-
 <h2>Required Cuts</h2>
 
 <div id="cutRows"></div>
 
-<button id="addButton" class="secondary" type="button">
-+ Add another cut
+<button type="button" id="addCut" class="secondary">
++ Add required cut
 </button>
+</div>
 
-<button id="calculateButton" class="primary" type="button">
+
+<div class="card">
+<h2>Reusable Offcuts</h2>
+
+<p class="small">
+Optional. Enter usable pieces you already have. The planner will try
+these before buying new full lengths.
+</p>
+
+<div id="offcutRows"></div>
+
+<button type="button" id="addOffcut" class="secondary">
++ Add available offcut
+</button>
+</div>
+
+
+<div class="card">
+<button type="button" id="calculate" class="primary">
 Optimise Cutting Plan
 </button>
 
 <div id="error"></div>
-
 </div>
 
 
 <div class="card buttons">
-
 <h2>Jobs</h2>
 
 <div class="buttonGrid">
-<button id="saveButton" class="secondary">Save Job</button>
-<button id="loadButton" class="secondary">Load Saved Job</button>
+<button type="button" id="save" class="secondary">Save Job</button>
+<button type="button" id="load" class="secondary">Load Job</button>
 </div>
-
 </div>
 
 </div>
@@ -177,7 +151,6 @@ Optimise Cutting Plan
 <div id="results">
 
 <div class="card">
-
 <h2>Summary</h2>
 
 <div id="validation"></div>
@@ -185,51 +158,47 @@ Optimise Cutting Plan
 <div class="summary">
 
 <div class="stat">
-Full lengths
-<strong id="stockCount">0</strong>
+New lengths to buy
+<strong id="newCount">0</strong>
 </div>
 
 <div class="stat">
-Total cost
-<strong id="totalCost">£0.00</strong>
+Cost
+<strong id="cost">£0.00</strong>
 </div>
 
 <div class="stat">
-Total cuts
+Existing offcuts used
+<strong id="offcutsUsed">0</strong>
+</div>
+
+<div class="stat">
+Required pieces
 <strong id="cutCount">0</strong>
 </div>
 
 <div class="stat">
-Total offcut
-<strong id="totalWaste">0 mm</strong>
-</div>
-
-<div class="stat">
-Utilisation
-<strong id="utilisation">0%</strong>
-</div>
-
-<div class="stat">
-Purchased
+New timber purchased
 <strong id="purchased">0 mm</strong>
+</div>
+
+<div class="stat">
+Remaining material
+<strong id="remaining">0 mm</strong>
 </div>
 
 </div>
 
 <div class="buttonGrid buttons">
-<button id="printButton" class="secondary">Print / Save PDF</button>
-<button id="editButton" class="secondary">Back to Inputs</button>
+<button type="button" id="print" class="secondary">Print / Save PDF</button>
+<button type="button" id="back" class="secondary">Back to Inputs</button>
 </div>
-
 </div>
 
 
 <div class="card">
-
 <h2>Cutting Plan</h2>
-
 <div id="plan"></div>
-
 </div>
 
 </div>
@@ -241,31 +210,19 @@ Purchased
 "use strict";
 
 const cutRows = document.getElementById("cutRows");
+const offcutRows = document.getElementById("offcutRows");
 
-document.getElementById("addButton").onclick = () => addRow();
-document.getElementById("calculateButton").onclick = calculate;
-document.getElementById("printButton").onclick = () => window.print();
-
-document.getElementById("editButton").onclick = () => {
- window.scrollTo({top:0,behavior:"smooth"});
-};
-
-document.getElementById("saveButton").onclick = saveJob;
-document.getElementById("loadButton").onclick = loadJob;
-
-
-function addRow(length="",qty=""){
-
+function makeRow(container,length="",qty=""){
  const row=document.createElement("div");
- row.className="cutrow";
+ row.className="row3";
 
  const a=document.createElement("div");
  const al=document.createElement("label");
  al.textContent="Length (mm)";
  const ai=document.createElement("input");
  ai.type="number";
- ai.className="cutLength";
  ai.value=length;
+ ai.className="lengthInput";
  a.append(al,ai);
 
  const b=document.createElement("div");
@@ -273,269 +230,490 @@ function addRow(length="",qty=""){
  bl.textContent="Quantity";
  const bi=document.createElement("input");
  bi.type="number";
- bi.className="cutQty";
  bi.value=qty;
+ bi.className="qtyInput";
  b.append(bl,bi);
 
- const remove=document.createElement("button");
- remove.type="button";
- remove.className="remove";
- remove.textContent="✕";
- remove.onclick=()=>row.remove();
+ const x=document.createElement("button");
+ x.type="button";
+ x.className="remove";
+ x.textContent="✕";
+ x.onclick=()=>row.remove();
 
- row.append(a,b,remove);
- cutRows.appendChild(row);
+ row.append(a,b,x);
+ container.appendChild(row);
 }
 
+function addCut(length="",qty=""){
+ makeRow(cutRows,length,qty);
+}
 
-/* Starting example */
-addRow(2000,3);
-addRow(900,8);
-addRow(624,8);
-addRow(548,8);
-addRow(430,2);
+function addOffcut(length="",qty=""){
+ makeRow(offcutRows,length,qty);
+}
 
+document.getElementById("addCut").onclick=()=>addCut();
+document.getElementById("addOffcut").onclick=()=>addOffcut();
+document.getElementById("calculate").onclick=calculate;
+document.getElementById("print").onclick=()=>window.print();
 
-function getInputs(){
+document.getElementById("back").onclick=()=>{
+ window.scrollTo({top:0,behavior:"smooth"});
+};
 
+document.getElementById("save").onclick=saveJob;
+document.getElementById("load").onclick=loadJob;
+
+/* Your current example */
+addCut(2000,3);
+addCut(900,8);
+addCut(624,8);
+addCut(548,8);
+addCut(430,2);
+
+function readRows(container){
+ const rows=[...container.querySelectorAll(".row3")];
+ const output=[];
+
+ for(const row of rows){
+   const length=Number(row.querySelector(".lengthInput").value);
+   const qty=Number(row.querySelector(".qtyInput").value);
+
+   if(!length && !qty) continue;
+
+   if(length<=0 || qty<=0 || !Number.isInteger(qty)){
+     throw Error("Check all lengths and quantities.");
+   }
+
+   output.push({length,qty});
+ }
+
+ return output;
+}
+
+function expand(rows){
+ const arr=[];
+ for(const r of rows){
+   for(let i=0;i<r.qty;i++) arr.push(r.length);
+ }
+ return arr;
+}
+
+function readInputs(){
  const stock=Number(document.getElementById("stockLength").value);
  const kerf=Number(document.getElementById("kerf").value);
  const price=Number(document.getElementById("price").value)||0;
  const mode=document.getElementById("kerfMode").value;
 
- if(stock<=0) throw Error("Enter a valid stock length.");
+ if(stock<=0) throw Error("Enter a valid new timber length.");
  if(kerf<0) throw Error("Kerf cannot be negative.");
 
- const lengths=document.querySelectorAll(".cutLength");
- const qtys=document.querySelectorAll(".cutQty");
+ const requiredRows=readRows(cutRows);
+ const offRows=readRows(offcutRows);
 
- let cuts=[];
- let rows=[];
-
- for(let i=0;i<lengths.length;i++){
-
-   const length=Number(lengths[i].value);
-   const qty=Number(qtys[i].value);
-
-   if(!length && !qty) continue;
-
-   if(length<=0 || qty<=0 || !Number.isInteger(qty))
-     throw Error("Check all cut lengths and quantities.");
-
-   if(length>stock)
-     throw Error(length+" mm is longer than the stock length.");
-
-   rows.push({length,qty});
-
-   for(let n=0;n<qty;n++)
-     cuts.push(length);
- }
-
- if(!cuts.length)
+ if(!requiredRows.length)
    throw Error("Enter at least one required cut.");
 
- return {stock,kerf,price,mode,cuts,rows};
-}
+ const cuts=expand(requiredRows);
+ const offcuts=expand(offRows);
 
-
-/*
-For packing purposes:
-Every piece is represented as length + kerf.
-
-If kerf is "between pieces", each stock length effectively
-gets one kerf back after packing because the final piece
-doesn't require another separating cut.
-*/
-
-function effectiveCapacity(stock,kerf,mode){
-
- if(mode==="between")
-   return stock+kerf;
-
- return stock;
-}
-
-
-function effectiveCut(length,kerf){
- return length+kerf;
-}
-
-
-/*
-Initial Best-Fit Decreasing solution.
-This gives branch-and-bound a good upper bound immediately.
-*/
-
-function bestFit(cuts,capacity,kerf){
-
- let bins=[];
-
- for(const length of cuts){
-
-   const size=effectiveCut(length,kerf);
-
-   let best=-1;
-   let bestSpace=Infinity;
-
-   for(let i=0;i<bins.length;i++){
-
-     const space=capacity-bins[i].used;
-
-     if(size<=space && space-size<bestSpace){
-       best=i;
-       bestSpace=space-size;
-     }
-   }
-
-   if(best===-1){
-     bins.push({
-       used:size,
-       cuts:[length]
-     });
-   }else{
-     bins[best].used+=size;
-     bins[best].cuts.push(length);
+ for(const cut of cuts){
+   if(cut>stock && !offcuts.some(o=>o>=cut)){
+     throw Error(
+       cut+" mm is longer than the new timber length and no entered offcut can hold it."
+     );
    }
  }
-
- return bins;
-}
-
-
-/*
-Branch-and-bound bin packing.
-
-For normal DIY/job cutting lists this searches for a solution
-using fewer full lengths than Best-Fit Decreasing.
-
-A time limit prevents a very large job freezing a phone.
-*/
-
-function optimise(cuts,capacity,kerf){
-
- cuts=[...cuts].sort((a,b)=>b-a);
-
- const sizes=cuts.map(x=>effectiveCut(x,kerf));
-
- let best=bestFit(cuts,capacity,kerf);
- let bestCount=best.length;
-
- const total=sizes.reduce((a,b)=>a+b,0);
- const theoretical=Math.ceil(total/capacity);
-
- if(bestCount===theoretical)
-   return {
-     bins:best,
-     proven:true
-   };
-
- const deadline=performance.now()+1800;
-
- let binUsed=[];
- let binCuts=[];
- let answer=null;
- let timedOut=false;
-
-
- function search(index,target){
-
-   if(performance.now()>deadline){
-     timedOut=true;
-     return false;
-   }
-
-   if(index===cuts.length){
-
-     answer=binCuts
-       .filter(x=>x && x.length)
-       .map((x,i)=>({
-         cuts:[...x],
-         used:binUsed[i]
-       }));
-
-     return true;
-   }
-
-
-   const size=sizes[index];
-   const cut=cuts[index];
-
-   let triedSpaces=new Set();
-
-
-   for(let i=0;i<binUsed.length;i++){
-
-     const remaining=capacity-binUsed[i];
-
-     if(size>remaining) continue;
-
-     /*
-     Symmetry pruning:
-     bins with identical free space are equivalent.
-     */
-     if(triedSpaces.has(remaining)) continue;
-     triedSpaces.add(remaining);
-
-     binUsed[i]+=size;
-     binCuts[i].push(cut);
-
-     if(search(index+1,target))
-       return true;
-
-     binCuts[i].pop();
-     binUsed[i]-=size;
-   }
-
-
-   if(binUsed.length<target){
-
-     binUsed.push(size);
-     binCuts.push([cut]);
-
-     if(search(index+1,target))
-       return true;
-
-     binUsed.pop();
-     binCuts.pop();
-   }
-
-   return false;
- }
-
-
- /*
- Try successively smaller numbers of stock lengths.
- */
-
- for(let target=theoretical;target<bestCount;target++){
-
-   binUsed=[];
-   binCuts=[];
-   answer=null;
-
-   if(search(0,target)){
-
-     best=answer;
-     bestCount=answer.length;
-
-     return {
-       bins:best,
-       proven:true
-     };
-   }
-
-   if(timedOut)
-     break;
- }
-
 
  return {
-   bins:best,
-   proven:bestCount===theoretical,
-   timedOut
+   stock,kerf,price,mode,
+   requiredRows,offRows,cuts,offcuts
  };
 }
 
+function usedLength(cuts,kerf,mode){
+ if(!cuts.length) return 0;
+
+ const raw=cuts.reduce((a,b)=>a+b,0);
+
+ const kerfCuts=
+   mode==="between"
+   ? Math.max(0,cuts.length-1)
+   : cuts.length;
+
+ return raw+(kerfCuts*kerf);
+}
+
+function fits(cuts,sourceLength,kerf,mode){
+ return usedLength(cuts,kerf,mode)<=sourceLength;
+}
+
+/*
+ Generate useful cutting patterns for a single source length.
+
+ The search is restricted to the required piece types rather than every
+ individual piece, which is substantially faster for jobs containing
+ repeated dimensions.
+*/
+function generatePatterns(sourceLength,types,limits,kerf,mode,maxPatterns=3000){
+
+ const patterns=[];
+ const current=new Array(types.length).fill(0);
+
+ function recurse(index,pieces){
+
+   if(patterns.length>=maxPatterns) return;
+
+   if(index===types.length){
+
+     if(!pieces.length) return;
+
+     const used=usedLength(pieces,kerf,mode);
+
+     if(used<=sourceLength){
+       patterns.push({
+         counts:[...current],
+         cuts:[...pieces],
+         used,
+         waste:sourceLength-used
+       });
+     }
+     return;
+   }
+
+   const length=types[index];
+
+   for(let n=0;n<=limits[index];n++){
+
+     current[index]=n;
+
+     const added=[];
+     for(let x=0;x<n;x++) added.push(length);
+
+     const next=pieces.concat(added);
+
+     if(usedLength(next,kerf,mode)<=sourceLength){
+       recurse(index+1,next);
+     }else{
+       break;
+     }
+   }
+
+   current[index]=0;
+ }
+
+ recurse(0,[]);
+
+ patterns.sort((a,b)=>{
+   if(a.waste!==b.waste) return a.waste-b.waste;
+   return b.cuts.length-a.cuts.length;
+ });
+
+ /*
+ Remove patterns that use exactly the same quantities but are duplicates.
+ */
+ const seen=new Set();
+
+ return patterns.filter(p=>{
+   const key=p.counts.join(",");
+   if(seen.has(key)) return false;
+   seen.add(key);
+   return true;
+ });
+}
+
+function requirementData(cuts){
+
+ const map=new Map();
+
+ for(const c of cuts)
+   map.set(c,(map.get(c)||0)+1);
+
+ const types=[...map.keys()].sort((a,b)=>b-a);
+ const counts=types.map(t=>map.get(t));
+
+ return {types,counts};
+}
+
+function subtractCounts(a,b){
+ return a.map((v,i)=>v-b[i]);
+}
+
+function canSubtract(remaining,pattern){
+ for(let i=0;i<remaining.length;i++){
+   if(pattern[i]>remaining[i]) return false;
+ }
+ return true;
+}
+
+function allZero(a){
+ return a.every(x=>x===0);
+}
+
+function countPieces(a){
+ return a.reduce((x,y)=>x+y,0);
+}
+
+/*
+ Existing offcuts are allocated first.
+
+ For each offcut we choose the feasible pattern that:
+ 1. uses the most required material,
+ 2. leaves the least waste,
+ 3. contains the most pieces.
+
+ This avoids purchasing new timber for pieces that fit sensibly into
+ material already owned.
+*/
+function allocateOffcuts(data,types,remaining){
+
+ const available=[...data.offcuts].sort((a,b)=>b-a);
+ const usedSources=[];
+
+ for(const sourceLength of available){
+
+   if(allZero(remaining)) break;
+
+   const patterns=generatePatterns(
+     sourceLength,
+     types,
+     remaining,
+     data.kerf,
+     data.mode,
+     1200
+   );
+
+   let best=null;
+
+   for(const p of patterns){
+
+     if(!canSubtract(remaining,p.counts)) continue;
+
+     const raw=p.cuts.reduce((a,b)=>a+b,0);
+
+     if(
+       !best ||
+       raw>best.raw ||
+       (raw===best.raw && p.waste<best.pattern.waste) ||
+       (raw===best.raw &&
+        p.waste===best.pattern.waste &&
+        p.cuts.length>best.pattern.cuts.length)
+     ){
+       best={pattern:p,raw};
+     }
+   }
+
+   if(best){
+     remaining=subtractCounts(remaining,best.pattern.counts);
+
+     usedSources.push({
+       source:"offcut",
+       length:sourceLength,
+       cuts:best.pattern.cuts,
+       used:best.pattern.used
+     });
+   }
+ }
+
+ return {remaining,usedSources};
+}
+
+/*
+ Exact new-stock search.
+
+ This works on cutting patterns and remaining quantities rather than
+ assigning each piece individually.
+
+ It tries N stock lengths, starting from a mathematical lower bound.
+ The first completed solution therefore proves the minimum number of
+ new lengths, provided the search completes before the time limit.
+*/
+function optimiseNewStock(data,types,remaining){
+
+ if(allZero(remaining)){
+   return {
+     bins:[],
+     optimal:true,
+     timedOut:false
+   };
+ }
+
+ const patterns=generatePatterns(
+   data.stock,
+   types,
+   remaining,
+   data.kerf,
+   data.mode,
+   6000
+ );
+
+ if(!patterns.length)
+   throw Error("No valid cutting pattern could be generated.");
+
+ const totalRaw=remaining.reduce(
+   (sum,n,i)=>sum+(n*types[i]),0
+ );
+
+ const totalPieces=countPieces(remaining);
+
+ let kerfLower;
+
+ if(data.mode==="every"){
+   kerfLower=totalPieces*data.kerf;
+ }else{
+   kerfLower=0;
+ }
+
+ const lower=Math.max(
+   1,
+   Math.ceil((totalRaw+kerfLower)/data.stock)
+ );
+
+ /*
+ Greedy upper bound.
+ */
+ let greedyRemaining=[...remaining];
+ let greedy=[];
+
+ while(!allZero(greedyRemaining)){
+
+   let chosen=null;
+
+   for(const p of patterns){
+     if(canSubtract(greedyRemaining,p.counts)){
+       chosen=p;
+       break;
+     }
+   }
+
+   if(!chosen)
+     throw Error("Unable to construct a valid cutting plan.");
+
+   greedy.push(chosen);
+   greedyRemaining=subtractCounts(
+     greedyRemaining,
+     chosen.counts
+   );
+ }
+
+ let best=greedy;
+ const upper=greedy.length;
+
+ /*
+ Give a phone a useful search window without locking the page indefinitely.
+ */
+ const deadline=performance.now()+5000;
+ let timedOut=false;
+
+ /*
+ Memoise failed states.
+ */
+ function tryTarget(target){
+
+   const memo=new Set();
+   let solution=null;
+
+   function search(rem,binsLeft,chosen){
+
+     if(performance.now()>deadline){
+       timedOut=true;
+       return false;
+     }
+
+     if(allZero(rem)){
+       solution=[...chosen];
+       return true;
+     }
+
+     if(binsLeft===0) return false;
+
+     const raw=rem.reduce(
+       (sum,n,i)=>sum+(n*types[i]),0
+     );
+
+     if(raw>(binsLeft*data.stock))
+       return false;
+
+     const key=binsLeft+"|"+rem.join(",");
+
+     if(memo.has(key)) return false;
+
+     /*
+     Force the next pattern to contain the largest outstanding piece.
+     This removes many equivalent permutations.
+     */
+     let first=-1;
+
+     for(let i=0;i<rem.length;i++){
+       if(rem[i]>0){
+         first=i;
+         break;
+       }
+     }
+
+     for(const p of patterns){
+
+       if(p.counts[first]===0) continue;
+       if(!canSubtract(rem,p.counts)) continue;
+
+       const next=subtractCounts(rem,p.counts);
+
+       chosen.push(p);
+
+       if(search(next,binsLeft-1,chosen))
+         return true;
+
+       chosen.pop();
+
+       if(timedOut) return false;
+     }
+
+     memo.add(key);
+     return false;
+   }
+
+   const found=search(
+     [...remaining],
+     target,
+     []
+   );
+
+   return {found,solution};
+ }
+
+ for(let target=lower;target<=upper;target++){
+
+   const attempt=tryTarget(target);
+
+   if(attempt.found){
+     best=attempt.solution;
+
+     return {
+       bins:best.map(p=>({
+         source:"new",
+         length:data.stock,
+         cuts:p.cuts,
+         used:p.used
+       })),
+       optimal:true,
+       timedOut:false
+     };
+   }
+
+   if(timedOut) break;
+ }
+
+ return {
+   bins:best.map(p=>({
+     source:"new",
+     length:data.stock,
+     cuts:p.cuts,
+     used:p.used
+   })),
+   optimal:false,
+   timedOut:true
+ };
+}
 
 function calculate(){
 
@@ -544,121 +722,105 @@ function calculate(){
 
  try{
 
-   const data=getInputs();
+   const data=readInputs();
+   const req=requirementData(data.cuts);
 
-   const capacity=
-     effectiveCapacity(
-       data.stock,
-       data.kerf,
-       data.mode
-     );
+   let remaining=[...req.counts];
 
-   const result=
-     optimise(
-       data.cuts,
-       capacity,
-       data.kerf
-     );
+   const offResult=allocateOffcuts(
+     data,
+     req.types,
+     remaining
+   );
 
-   display(data,result);
+   remaining=offResult.remaining;
 
- }catch(err){
+   const newResult=optimiseNewStock(
+     data,
+     req.types,
+     remaining
+   );
+
+   const sources=[
+     ...offResult.usedSources,
+     ...newResult.bins
+   ];
+
+   displayPlan(data,sources,newResult);
+
+ }catch(e){
 
    document.getElementById("results").style.display="none";
 
    error.innerHTML=
-     '<div class="error">'+
-     escapeHtml(err.message)+
-     '</div>';
+     '<div class="error">'+escapeHtml(e.message)+'</div>';
  }
 }
 
-
-function actualUsed(bin,data){
-
- const sum=
-   bin.cuts.reduce((a,b)=>a+b,0);
-
- let kerfCount;
-
- if(data.mode==="between")
-   kerfCount=Math.max(0,bin.cuts.length-1);
- else
-   kerfCount=bin.cuts.length;
-
- return {
-   cutLength:sum,
-   kerfCount,
-   kerfUsed:kerfCount*data.kerf,
-   used:sum+(kerfCount*data.kerf)
- };
-}
-
-
-function display(data,result){
-
- const bins=result.bins;
-
- let valid=true;
- let produced=[];
-
- let waste=0;
- let usedTotal=0;
+function displayPlan(data,sources,result){
 
  const plan=document.getElementById("plan");
  plan.innerHTML="";
 
+ const produced=[];
+ let totalRemaining=0;
+ let newCount=0;
+ let offcutsUsed=0;
 
- bins.forEach((bin,index)=>{
+ sources.forEach((source,index)=>{
 
-   const calc=actualUsed(bin,data);
+   produced.push(...source.cuts);
 
-   const remaining=data.stock-calc.used;
+   const used=usedLength(
+     source.cuts,
+     data.kerf,
+     data.mode
+   );
 
-   if(remaining<0)
-     valid=false;
+   const leftover=source.length-used;
 
-   produced.push(...bin.cuts);
+   totalRemaining+=leftover;
 
-   waste+=remaining;
-   usedTotal+=calc.used;
+   if(source.source==="new")
+     newCount++;
+   else
+     offcutsUsed++;
 
+   const box=document.createElement("div");
 
-   const div=document.createElement("div");
-   div.className="stock";
+   box.className=
+     "stock "+
+     (source.source==="offcut" ? "offcutStock" : "");
 
-   const cutsText=
-     bin.cuts.join(" + ");
+   const badge=
+     source.source==="new"
+     ? '<span class="badge newBadge">NEW TIMBER</span>'
+     : '<span class="badge offBadge">EXISTING OFFCUT</span>';
 
+   const kerfCount=
+     data.mode==="between"
+     ? Math.max(0,source.cuts.length-1)
+     : source.cuts.length;
 
-   div.innerHTML=
-     "<h3>Length "+(index+1)+
-     " — "+data.stock+" mm</h3>"+
-
+   box.innerHTML=
+     badge+
+     "<h3>"+
+     (source.source==="new" ? "New length " : "Offcut ")+
+     (index+1)+" — "+source.length+" mm</h3>"+
      '<div class="cuts">'+
-     escapeHtml(cutsText)+
-     " mm</div>"+
+     source.cuts.join(" + ")+" mm</div>"+
+     "Pieces: "+source.cuts.length+"<br>"+
+     "Kerf: "+(kerfCount*data.kerf)+" mm<br>"+
+     "Used: "+used+" mm<br>"+
+     "<strong>Remaining: "+leftover+" mm</strong>";
 
-     "Pieces: "+bin.cuts.length+"<br>"+
-     "Cut lengths: "+calc.cutLength+" mm<br>"+
-     "Kerf allowance: "+calc.kerfUsed+" mm<br>"+
-     "Used: "+calc.used+" mm<br>"+
-     "<strong>Offcut: "+remaining+" mm</strong>";
-
-
-   plan.appendChild(div);
+   plan.appendChild(box);
  });
-
-
- /*
- Validate that every requested cut exists exactly once.
- */
 
  const wanted=[...data.cuts].sort((a,b)=>a-b);
  const got=[...produced].sort((a,b)=>a-b);
 
- if(wanted.length!==got.length)
-   valid=false;
+ let valid=wanted.length===got.length;
 
  if(valid){
    for(let i=0;i<wanted.length;i++){
@@ -669,68 +831,58 @@ function display(data,result){
    }
  }
 
+ for(const s of sources){
+   if(!fits(s.cuts,s.length,data.kerf,data.mode))
+     valid=false;
+ }
 
- const validation=
-   document.getElementById("validation");
+ const validation=document.getElementById("validation");
 
-
- if(valid){
-
-   let message=
-     "✓ Plan validated — every requested cut is accounted for and no stock length is overloaded.";
-
-   if(result.proven)
-     message+=" Minimum stock count reached for this search.";
+ if(!valid){
 
    validation.innerHTML=
-     '<div class="good">'+message+"</div>";
+     '<div class="error">'+
+     "VALIDATION FAILED — do not use this cutting plan."+
+     "</div>";
+
+ }else if(result.optimal){
+
+   validation.innerHTML=
+     '<div class="good">'+
+     "<strong>✓ OPTIMAL</strong><br>"+
+     "Every required piece is accounted for, no source is overloaded, "+
+     "and the minimum number of new full lengths has been proven "+
+     "after the entered offcuts were allocated."+
+     "</div>";
 
  }else{
 
    validation.innerHTML=
-     '<div class="error">'+
-     "Plan validation failed. Do not use this cutting list."+
-     "</div>";
- }
-
-
- if(result.timedOut && !result.proven){
-
-   validation.innerHTML+=
+     '<div class="good">'+
+     "✓ Plan validated — every required piece is accounted for and "+
+     "no timber length is overloaded."+
+     "</div>"+
      '<div class="warning">'+
-     "A valid low-waste plan was found, but the exhaustive optimisation time limit was reached, so an even better arrangement may exist."+
+     "<strong>BEST VALID PLAN FOUND</strong><br>"+
+     "The optimiser reached its search time limit before proving that "+
+     "no plan using fewer new lengths exists."+
      "</div>";
  }
 
+ document.getElementById("newCount").textContent=newCount;
 
- const purchased=bins.length*data.stock;
+ document.getElementById("cost").textContent=
+   "£"+(newCount*data.price).toFixed(2);
 
- const utilisation=
-   purchased
-   ? (usedTotal/purchased*100).toFixed(1)
-   : 0;
+ document.getElementById("offcutsUsed").textContent=offcutsUsed;
 
- const cost=bins.length*data.price;
-
-
- document.getElementById("stockCount").textContent=
-   bins.length;
-
- document.getElementById("totalCost").textContent=
-   "£"+cost.toFixed(2);
-
- document.getElementById("cutCount").textContent=
-   data.cuts.length;
-
- document.getElementById("totalWaste").textContent=
-   waste+" mm";
-
- document.getElementById("utilisation").textContent=
-   utilisation+"%";
+ document.getElementById("cutCount").textContent=data.cuts.length;
 
  document.getElementById("purchased").textContent=
-   purchased+" mm";
+   (newCount*data.stock)+" mm";
 
+ document.getElementById("remaining").textContent=
+   totalRemaining+" mm";
 
  document.getElementById("results").style.display="block";
 
@@ -739,76 +891,69 @@ function display(data,result){
  });
 }
 
-
 function saveJob(){
 
  try{
 
-   const data=getInputs();
-
-   const save={
-     stock:data.stock,
-     kerf:data.kerf,
-     price:data.price,
-     mode:data.mode,
-     rows:data.rows
-   };
+   const data=readInputs();
 
    localStorage.setItem(
-     "timberPlannerJob",
-     JSON.stringify(save)
+     "timberPlannerJobV2",
+     JSON.stringify({
+       stock:data.stock,
+       kerf:data.kerf,
+       price:data.price,
+       mode:data.mode,
+       requiredRows:data.requiredRows,
+       offRows:data.offRows
+     })
    );
 
    alert("Job saved on this device.");
 
- }catch(err){
-   alert(err.message);
+ }catch(e){
+   alert(e.message);
  }
 }
 
-
 function loadJob(){
 
- const raw=
-   localStorage.getItem("timberPlannerJob");
+ const raw=localStorage.getItem("timberPlannerJobV2");
 
  if(!raw){
-   alert("No saved job found on this device.");
+   alert("No saved job found.");
    return;
  }
 
  try{
 
-   const data=JSON.parse(raw);
+   const d=JSON.parse(raw);
 
-   document.getElementById("stockLength").value=data.stock;
-   document.getElementById("kerf").value=data.kerf;
-   document.getElementById("price").value=data.price||0;
-   document.getElementById("kerfMode").value=data.mode||"every";
+   document.getElementById("stockLength").value=d.stock;
+   document.getElementById("kerf").value=d.kerf;
+   document.getElementById("price").value=d.price||0;
+   document.getElementById("kerfMode").value=d.mode||"every";
 
    cutRows.innerHTML="";
+   offcutRows.innerHTML="";
 
-   data.rows.forEach(row=>{
-     addRow(row.length,row.qty);
-   });
+   (d.requiredRows||[]).forEach(r=>addCut(r.length,r.qty));
+   (d.offRows||[]).forEach(r=>addOffcut(r.length,r.qty));
 
    alert("Saved job loaded.");
 
- }catch(err){
+ }catch(e){
    alert("Could not load the saved job.");
  }
 }
 
-
-function escapeHtml(value){
-
- return String(value)
+function escapeHtml(v){
+ return String(v)
    .replaceAll("&","&amp;")
    .replaceAll("<","&lt;")
    .replaceAll(">","&gt;")
    .replaceAll('"',"&quot;");
 }
-
 </script>
 
 </body>

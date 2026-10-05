@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timber Cutting Planner</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f5f4;
+  color: #202522;
+}
+
+header {
+  background: #245c43;
+  color: white;
+  padding: 22px 16px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 25px;
+}
+
+header p {
+  margin: 6px 0 0;
+  opacity: .9;
+  font-size: 14px;
+}
+
+.container {
+  max-width: 700px;
+  margin: auto;
+  padding: 16px;
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+
+h2 {
+  margin-top: 0;
+  font-size: 19px;
+}
+
+label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+input {
+  width: 100%;
+  padding: 11px;
+  margin-top: 5px;
+  border: 1px solid #bbb;
+  border-radius: 7px;
+  font-size: 16px;
+}
+
+.settings {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cut-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 44px;
+  gap: 8px;
+  margin-bottom: 10px;
+  align-items: end;
+}
+
+button {
+  border: 0;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.add {
+  width: 100%;
+  background: #e4ebe7;
+  color: #245c43;
+}
+
+.delete {
+  background: #eee;
+  color: #a12626;
+  height: 44px;
+}
+
+.calculate {
+  width: 100%;
+  background: #245c43;
+  color: white;
+  padding: 15px;
+  margin-top: 8px;
+  font-size: 18px;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat {
+  background: #eef4f0;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 22px;
+  color: #245c43;
+  margin-top: 3px;
+}
+
+.stock {
+  border-left: 5px solid #245c43;
+  background: #f8faf9;
+  padding: 14px;
+  margin-top: 12px;
+  border-radius: 6px;
+}
+
+.stock-title {
+  font-weight: bold;
+  font-size: 17px;
+}
+
+.cuts {
+  font-size: 18px;
+  margin: 9px 0;
+  font-weight: bold;
+}
+
+.offcut {
+  font-size: 14px;
+  color: #555;
+}
+
+.error {
+  background: #ffe8e8;
+  color: #8b1515;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 12px;
+}
+
+.hidden { display: none; }
+
+@media(max-width:500px) {
+  .settings { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🪵 Timber Cutting Planner</h1>
+  <p>Minimise waste and reuse available space</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h2>Timber</h2>
+
+    <div class="settings">
+      <div>
+        <label>Purchased length (mm)</label>
+        <input id="stockLength" type="number" value="2400">
+      </div>
+
+      <div>
+        <label>Saw kerf (mm)</label>
+        <input id="kerf" type="number" value="3">
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Required Cuts</h2>
+
+    <div id="cuts"></div>
+
+    <button class="add" onclick="addRow()">+ Add another cut</button>
+
+    <button class="calculate" onclick="calculate()">
+      Calculate Cutting Plan
+    </button>
+
+    <div id="error"></div>
+  </div>
+
+  <div id="results" class="hidden">
+
+    <div class="card">
+      <h2>Summary</h2>
+
+      <div class="summary">
+        <div class="stat">
+          Full lengths to buy
+          <strong id="lengthCount">0</strong>
+        </div>
+
+        <div class="stat">
+          Total offcut
+          <strong id="totalWaste">0 mm</strong>
+        </div>
+
+        <div class="stat">
+          Total cuts
+          <strong id="totalCuts">0</strong>
+        </div>
+
+        <div class="stat">
+          Utilisation
+          <strong id="utilisation">0%</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Cutting Plan</h2>
+      <div id="plan"></div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+const cutsDiv = document.getElementById("cuts");
+
+function addRow(length="", qty="") {
+  const row = document.createElement("div");
+  row.className = "cut-row";
+
+  row.innerHTML = `
+    <div>
+      <label>Length (mm)</label>
+      <input class="cutLength" type="number" value="${length}">
+    </div>
+
+    <div>
+      <label>Quantity</label>
+      <input class="cutQty" type="number" value="${qty}">
+    </div>
+
+    <button class="delete" onclick="this.parentElement.remove()">✕</button>
+  `;
+
+  cutsDiv
